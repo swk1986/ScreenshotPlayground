@@ -8,4 +8,11 @@
         <LangVersion>12</LangVersion>
     </PropertyGroup>
 
+    <ItemGroup>
+        <Reference Include="System.Windows.Presentation"/>
+        <Reference Include="UIAutomationClient"/>
+        <Reference Include="UIAutomationTypes" />
+        <Reference Include="WindowsBase"/>
+    </ItemGroup>
+
 </Project>

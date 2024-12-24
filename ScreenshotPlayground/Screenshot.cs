@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
 
 namespace ScreenshotPlayground;
@@ -23,6 +24,13 @@ public static class Screenshot
         BLACKNESS = 0x00000042,
         WHITENESS = 0x00FF0062
     }
+
+    [DllImport("user32.dll")]
+    public static extern bool GetClientRect(IntPtr hWnd, ref RECT lpRect);
+
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static extern bool IsIconic(IntPtr hWnd);
 
     [DllImport("user32.dll")]
     public static extern IntPtr GetWindowRect(IntPtr hWnd, ref RECT rect);
@@ -63,7 +71,9 @@ public static class Screenshot
     [DllImport("gdi32.dll")]
     private static extern bool DeleteObject(IntPtr hObject);
 
+
     [StructLayout(LayoutKind.Sequential)]
+    [DebuggerDisplay("Left: {Left}, Top: {Top}, Right: {Right}, Bottom: {Bottom}, Width: {Right - Left}, Height: {Top - Bottom}")]
     public struct RECT
     {
         public int Left;
@@ -133,8 +143,19 @@ public static class Screenshot
 
         private static Bitmap CaptureWindow(IntPtr hwnd, bool includeFrame, float scaleFactor)
         {
+
+            const int PW_ALL = 0;
+            const int PW_CLIENTONLY = 1;
+            
+            
             var rc = new RECT();
             GetWindowRect(hwnd, ref rc);
+
+            // if (WindowDetails.IsWindow(hwnd) && !includeFrame)
+            // {
+            //     var clientRc = new RECT();
+            //     GetClientRect(hwnd, ref clientRc);
+            // }
 
             var width = (int)((rc.Right - rc.Left) * scaleFactor);
             var height = (int)((rc.Bottom - rc.Top) * scaleFactor);
@@ -145,7 +166,7 @@ public static class Screenshot
             var hOld = SelectObject(hdcDest, hBitmap);
 
             // Fensterrahmen ein- oder ausschließen
-            var nFlags = includeFrame ? 1 : 0;
+            var nFlags = includeFrame ? PW_ALL: PW_CLIENTONLY; // 0 = PW_ALL
             PrintWindow(hwnd, hdcDest, nFlags);
 
             SelectObject(hdcDest, hOld);

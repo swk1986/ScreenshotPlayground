@@ -8,16 +8,23 @@ var windowHandle =
     ?? throw new Exception("window not found");
 
 
-System.Threading.Thread.Sleep(2500);
+//System.Threading.Thread.Sleep(2500);
 
-var image = Screenshot.FromWindow(windowHandle)
-    .IncludeFrame()
-    .Take();
-image.Save("screenshot.png", ImageFormat.Png);
+if (!Screenshot.IsIconic(windowHandle))
+{
+   // Screenshot.FromWindow(windowHandle)
+   //      .IncludeFrame()
+   //      .Take()
+   //      .Save("screenshot_IncludeFrame.png", ImageFormat.Png);
+   // Screenshot.FromWindow(windowHandle)
+   //      .IncludeFrame()
+   //      .Take()
+   //      .Save("screenshot_IncludeFrame.png", ImageFormat.Png);
 
-// Screenshot eines Bereichs innerhalb des Fensters erstellen (ohne Rahmen)
-var areaImage = Screenshot.FromWindow(windowHandle)
-    .ExcludeFrame()
-    .CaptureArea(100, 100, 200, 150)
-    .Take();
-areaImage.Save("area_screenshot.png", ImageFormat.Png);
+
+    Screenshot.FromWindow(windowHandle)
+        .ExcludeFrame()
+        .Take()
+        .Save("screenshot_ExcludeFrame.png", ImageFormat.Png);
+
+}
