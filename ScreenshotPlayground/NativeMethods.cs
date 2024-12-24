@@ -3,7 +3,7 @@ using System.Runtime.InteropServices;
 
 namespace ScreenshotPlayground;
 
-internal class NativeMethods
+internal static class NativeMethods
 {
     [DllImport("user32.dll")]
     internal static extern bool GetClientRect(IntPtr hWnd, ref RECT lpRect);
