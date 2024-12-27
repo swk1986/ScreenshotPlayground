@@ -1,12 +1,20 @@
 ﻿using System.Diagnostics;
+using System.Drawing;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace ScreenshotPlayground;
 
 internal static class NativeMethods
 {
+    [DllImport("user32.dll", ExactSpelling = true)]
+    internal static extern IntPtr GetAncestor(IntPtr hwnd, GetAncestorFlags gaFlags);
+
     [DllImport("user32.dll")]
-    internal static extern bool GetClientRect(IntPtr hWnd, ref RECT lpRect);
+    internal static extern IntPtr GetForegroundWindow();
+
+    [DllImport("user32.dll")]
+    internal static extern bool GetClientRect(IntPtr hWnd, out RECT lpRect);
 
     [DllImport("user32.dll")]
     [return: MarshalAs(UnmanagedType.Bool)]
@@ -47,6 +55,24 @@ internal static class NativeMethods
     [DllImport("gdi32.dll")]
     internal static extern bool DeleteObject(IntPtr hObject);
 
+    internal enum GetAncestorFlags
+    {
+        /// <summary>
+        ///     Ruft das übergeordnete Fenster des angegebenen Fensters ab.
+        /// </summary>
+        GetParent = 1,
+
+        /// <summary>
+        ///     Ruft das oberste Fenster im Fensterhierarchiebaum ab, zu dem das angegebene Fenster gehört.
+        /// </summary>
+        GetRoot = 2,
+
+        /// <summary>
+        ///     Ruft das Handle des Besitzers des angegebenen Fensters ab.
+        /// </summary>
+        GetRootOwner = 3
+    }
+
     internal enum TernaryRasterOperations : uint
     {
         SRCCOPY = 0x00CC0020,
@@ -77,4 +103,53 @@ internal static class NativeMethods
         public int Right;
         public int Bottom;
     }
+    // [DllImport("gdi32.dll")]
+    // internal static extern int SetMapMode(IntPtr hdc, int fnMapMode);
+    //
+    // [DllImport("gdi32.dll")]
+    // internal static extern bool SetWindowExtEx(IntPtr hdc, int nXExtent, int nYExtent, IntPtr lpSize);
+    //
+    // [DllImport("gdi32.dll")]
+    // internal static extern bool SetViewportExtEx(IntPtr hdc, int nXExtent, int nYExtent, IntPtr lpSize);
+
+    // internal const int MM_ANISOTROPIC = 8;
+    
+    [DllImport("user32.dll")]
+    internal static extern bool ClientToScreen(IntPtr hWnd, out Point lpPoint);
+    
+    // [DllImport("user32.dll")]
+    // internal static extern bool EnumWindows(EnumWindowsProc enumFunc, IntPtr lParam);
+
+    [DllImport("user32.dll")]
+    internal static extern IntPtr GetWindow(IntPtr hWnd, uint uCmd);
+
+    internal  delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
+    
+    
+    [DllImport("user32.dll")]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    internal static extern bool IsWindowVisible(IntPtr hWnd);
+    [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Auto)]
+    internal static extern int GetClassName(IntPtr hWnd, StringBuilder lpClassName, int nMaxCount);
+
+    [DllImport("user32.dll", CharSet = CharSet.Auto, SetLastError = true)]
+    internal static extern int GetWindowText(IntPtr hWnd, StringBuilder lpString, int nMaxCount);
+    internal static bool DoesMethodExist(string module, string procName)
+    {
+        var libPtr = LoadLibrary(module);
+        if (libPtr == IntPtr.Zero) return false;
+
+        var procAddr = GetProcAddress(libPtr, procName);
+        return procAddr != IntPtr.Zero;
+    }
+    
+    //ANSI-Encodung important
+    [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
+    internal static extern IntPtr GetProcAddress(IntPtr hModule, [MarshalAs(UnmanagedType.LPStr)] string procName);
+
+    //ANSI-Encodung important
+    [DllImport("kernel32", SetLastError = true, CharSet = CharSet.Ansi)]
+    internal static extern IntPtr LoadLibrary([MarshalAs(UnmanagedType.LPStr)] string lpFileName);
+
+
 }

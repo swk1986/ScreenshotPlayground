@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScreenshotPlayground", "ScreenshotPlayground\ScreenshotPlayground.csproj", "{C52FDB04-4578-4B9B-BAB1-D8D16D24DB6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lineal", "Lineal\Lineal.csproj", "{83210713-A27C-4CAC-93BA-CC3EDCE929A4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -12,5 +14,9 @@ Global
 		{C52FDB04-4578-4B9B-BAB1-D8D16D24DB6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C52FDB04-4578-4B9B-BAB1-D8D16D24DB6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C52FDB04-4578-4B9B-BAB1-D8D16D24DB6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{83210713-A27C-4CAC-93BA-CC3EDCE929A4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{83210713-A27C-4CAC-93BA-CC3EDCE929A4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{83210713-A27C-4CAC-93BA-CC3EDCE929A4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{83210713-A27C-4CAC-93BA-CC3EDCE929A4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
