@@ -1,3 +1,4 @@
+// ReSharper disable LocalizableElement
 namespace Lineal;
 
 public partial class Form1 : Form
@@ -29,7 +30,20 @@ public partial class Form1 : Form
                $"Width: {windowRect.Right - windowRect.Left}, " +
                $"Height: {windowRect.Bottom - windowRect.Top})";
 
-        ClientRectLabel.Text =
+        Controls.OfType<Control>().ToList().ForEach(c => c.Text = GetControlRect(c));
+    }
+
+    private static string GetControlRect(Control c)
+    {
+        var hWnd = c.Handle;
+        
+        var clientRect = new NativeMethods.RECT();
+        NativeMethods.GetClientRect(hWnd, ref clientRect);
+
+        var clientPos = new Point();
+        NativeMethods.ClientToScreen(hWnd, ref clientPos);
+        
+        return 
             "relative Client: " +
             $"Left: {clientRect.Left}, " +
             $"Top: {clientRect.Top}, " +
